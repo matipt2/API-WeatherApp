@@ -1,5 +1,6 @@
 package org.example;
 
+
 import javax.swing.*;
 
 public class Gui {
@@ -18,12 +19,9 @@ public class Gui {
         this.humidity = humidity;
         this.windSpeed = windSpeed;
     }
-
-    public void show() {
-        // Create and set up your Swing GUI components here
-        // You can use JFrame, JLabel, etc. to display the weather data
-        JFrame frame = new JFrame("Weather Information");
-        frame.setSize(300, 200);
+public void show() {
+        JFrame frame = new JFrame("WeatherApp");
+        frame.setSize(700, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JLabel cityLabel = new JLabel("City: " + city);
@@ -43,5 +41,5 @@ public class Gui {
 
         frame.add(panel);
         frame.setVisible(true);
-    }
-}
+        }
+        }

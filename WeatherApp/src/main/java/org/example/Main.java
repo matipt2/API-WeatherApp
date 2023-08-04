@@ -11,6 +11,8 @@ public class Main {
         double minTemperature = weatherAPI.getMinTemperature(city);
         double humidity = weatherAPI.getHumidity(city);
         double windSpeed = weatherAPI.getWindSpeed(city);
+        Gui newGui = new Gui(city, temperature,maxTemperature,minTemperature,humidity,windSpeed);
+        newGui.show();
 
 
     }
