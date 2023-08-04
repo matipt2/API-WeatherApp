@@ -1,5 +1,7 @@
 package org.example;
-
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
@@ -19,10 +21,21 @@ public class Gui {
         this.humidity = humidity;
         this.windSpeed = windSpeed;
     }
-public void show() {
+    public void show() {
         JFrame frame = new JFrame("WeatherApp");
         frame.setSize(700, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+        ImageIcon originalImageIcon = new ImageIcon(getClass().getResource("/background.jpeg"));
+        Image originalImage = originalImageIcon.getImage();
+        int newWidth = 700;
+        int newHeight = 400;
+        Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        ImageIcon backgroundImage = new ImageIcon(resizedImage);
+        JLabel background = new JLabel(backgroundImage);
+        background.setLayout(new GridBagLayout());
+
 
         JLabel cityLabel = new JLabel("City: " + city);
         JLabel temperatureLabel = new JLabel("Temperature: " + temperature + " °C");
@@ -31,7 +44,9 @@ public void show() {
         JLabel humidityLabel = new JLabel("Humidity: " + humidity + "%");
         JLabel windSpeedLabel = new JLabel("Wind Speed: " + windSpeed + " m/s");
 
-        JPanel panel = new JPanel();
+
+        JPanel panel = new JPanel(new GridLayout(6, 1));
+        panel.setOpaque(false);
         panel.add(cityLabel);
         panel.add(temperatureLabel);
         panel.add(maxTemperatureLabel);
@@ -39,7 +54,19 @@ public void show() {
         panel.add(humidityLabel);
         panel.add(windSpeedLabel);
 
-        frame.add(panel);
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        background.add(panel, gbc);
+
+        
+        JPanel headPanel = new JPanel(new BorderLayout());
+        headPanel.add(background);
+
+
+        frame.add(headPanel);
+
         frame.setVisible(true);
-        }
-        }
+    }
+}
