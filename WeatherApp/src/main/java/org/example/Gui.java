@@ -81,31 +81,26 @@ public class Gui implements ActionListener {
             JButton sourceButton = (JButton) e.getSource();
 
             if (sourceButton.getText().equals("Update")) {
-                // Get the city name from the text field
                 String newCity = cityText.getText();
 
-                // Fetch updated weather data using the new city name
                 double newTemperature = weatherAPI.getTemperature(newCity);
                 double newMaxTemperature = weatherAPI.getMaxTemperature(newCity);
                 double newMinTemperature = weatherAPI.getMinTemperature(newCity);
                 double newHumidity = weatherAPI.getHumidity(newCity);
                 double newWindSpeed = weatherAPI.getWindSpeed(newCity);
 
-                // Update the fields with the new weather data
                 temperature = newTemperature;
                 maxTemperature = newMaxTemperature;
                 minTemperature = newMinTemperature;
                 humidity = newHumidity;
                 windSpeed = newWindSpeed;
 
-                // Update the GUI with the new weather data
                 temperatureLabel.setText("Temperature: " + String.format("%.2f", newTemperature) + " °C");
                 maxTemperatureLabel.setText("Max Temperature: " + String.format("%.2f", newMaxTemperature) + " °C");
                 minTemperatureLabel.setText("Min Temperature: " + String.format("%.2f", newMinTemperature) + " °C");
                 humidityLabel.setText("Humidity: " + newHumidity + "%");
                 windSpeedLabel.setText("Wind Speed: " + newWindSpeed + " m/s");
 
-                // Update the current city to the new city
                 city = newCity;
             }
         }
