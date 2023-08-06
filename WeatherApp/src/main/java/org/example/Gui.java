@@ -1,31 +1,50 @@
 package org.example;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
-
-public class Gui {
+public class Gui implements ActionListener {
     private String city;
     private double temperature;
     private double maxTemperature;
     private double minTemperature;
     private double humidity;
     private double windSpeed;
+    private WeatherAPI weatherAPI;
+    private JTextField cityText;
+    private JLabel temperatureLabel;
+    private JLabel maxTemperatureLabel;
+    private JLabel minTemperatureLabel;
+    private JLabel humidityLabel;
+    private JLabel windSpeedLabel;
 
-    public Gui(String city, double temperature, double maxTemperature, double minTemperature, double humidity, double windSpeed) {
+    public Gui(String city, double temperature, double maxTemperature, double minTemperature,
+               double humidity, double windSpeed, WeatherAPI weatherAPI, JTextField cityText) {
         this.city = city;
         this.temperature = temperature;
         this.maxTemperature = maxTemperature;
         this.minTemperature = minTemperature;
         this.humidity = humidity;
         this.windSpeed = windSpeed;
+        this.weatherAPI = weatherAPI;
+        this.cityText = cityText;
+        initializeLabels();
     }
+
+    private void initializeLabels() {
+        temperatureLabel = new JLabel("Temperature: " + String.format("%.2f", temperature) + " °C");
+        maxTemperatureLabel = new JLabel("Max Temperature: " + String.format("%.2f", maxTemperature) + " °C");
+        minTemperatureLabel = new JLabel("Min Temperature: " + String.format("%.2f", minTemperature) + " °C");
+        humidityLabel = new JLabel("Humidity: " + humidity + "%");
+        windSpeedLabel = new JLabel("Wind Speed: " + windSpeed + " m/s");
+    }
+
     public void show() {
         JFrame frame = new JFrame("WeatherApp");
         frame.setSize(700, 400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
         ImageIcon originalImageIcon = new ImageIcon(getClass().getResource("/background.jpeg"));
         Image originalImage = originalImageIcon.getImage();
@@ -34,39 +53,61 @@ public class Gui {
         Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
         ImageIcon backgroundImage = new ImageIcon(resizedImage);
         JLabel background = new JLabel(backgroundImage);
-        background.setLayout(new GridBagLayout());
+        background.setLayout(new BorderLayout());
 
-
-        JLabel cityLabel = new JLabel("City: " + city);
-        JLabel temperatureLabel = new JLabel("Temperature: " + temperature + " °C");
-        JLabel maxTemperatureLabel = new JLabel("Max Temperature: " + maxTemperature + " °C");
-        JLabel minTemperatureLabel = new JLabel("Min Temperature: " + minTemperature + " °C");
-        JLabel humidityLabel = new JLabel("Humidity: " + humidity + "%");
-        JLabel windSpeedLabel = new JLabel("Wind Speed: " + windSpeed + " m/s");
-
-
+        JButton updateButton = new JButton("Update");
         JPanel panel = new JPanel(new GridLayout(6, 1));
         panel.setOpaque(false);
-        panel.add(cityLabel);
+        panel.add(cityText);
+        panel.add(updateButton);
         panel.add(temperatureLabel);
         panel.add(maxTemperatureLabel);
         panel.add(minTemperatureLabel);
         panel.add(humidityLabel);
         panel.add(windSpeedLabel);
 
+        updateButton.addActionListener(this);
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        background.add(panel, gbc);
+        background.add(panel, BorderLayout.NORTH);
 
-        
-        JPanel headPanel = new JPanel(new BorderLayout());
-        headPanel.add(background);
-
-
-        frame.add(headPanel);
+        frame.add(background);
 
         frame.setVisible(true);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() instanceof JButton) {
+            JButton sourceButton = (JButton) e.getSource();
+
+            if (sourceButton.getText().equals("Update")) {
+                // Get the city name from the text field
+                String newCity = cityText.getText();
+
+                // Fetch updated weather data using the new city name
+                double newTemperature = weatherAPI.getTemperature(newCity);
+                double newMaxTemperature = weatherAPI.getMaxTemperature(newCity);
+                double newMinTemperature = weatherAPI.getMinTemperature(newCity);
+                double newHumidity = weatherAPI.getHumidity(newCity);
+                double newWindSpeed = weatherAPI.getWindSpeed(newCity);
+
+                // Update the fields with the new weather data
+                temperature = newTemperature;
+                maxTemperature = newMaxTemperature;
+                minTemperature = newMinTemperature;
+                humidity = newHumidity;
+                windSpeed = newWindSpeed;
+
+                // Update the GUI with the new weather data
+                temperatureLabel.setText("Temperature: " + String.format("%.2f", newTemperature) + " °C");
+                maxTemperatureLabel.setText("Max Temperature: " + String.format("%.2f", newMaxTemperature) + " °C");
+                minTemperatureLabel.setText("Min Temperature: " + String.format("%.2f", newMinTemperature) + " °C");
+                humidityLabel.setText("Humidity: " + newHumidity + "%");
+                windSpeedLabel.setText("Wind Speed: " + newWindSpeed + " m/s");
+
+                // Update the current city to the new city
+                city = newCity;
+            }
+        }
     }
 }
