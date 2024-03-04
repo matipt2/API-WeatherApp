@@ -3,7 +3,7 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
-        String apiKey = "a17574d53ccd93d7464afad74d772378";
+        String apiKey = "API_KEY";
         WeatherAPI weatherAPI = new WeatherAPI(apiKey);
         String city = "Warszawa";
         double temperature = weatherAPI.getTemperature(city);

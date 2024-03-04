@@ -43,7 +43,7 @@ public class Gui implements ActionListener {
 
     public void show() {
         JFrame frame = new JFrame("WeatherApp");
-        frame.setSize(700, 400);
+        frame.setSize(400, 180);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         ImageIcon originalImageIcon = new ImageIcon(getClass().getResource("/background.jpeg"));
@@ -51,8 +51,8 @@ public class Gui implements ActionListener {
         int newWidth = 700;
         int newHeight = 400;
         Image resizedImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
-        ImageIcon backgroundImage = new ImageIcon(resizedImage);
-        JLabel background = new JLabel(backgroundImage);
+
+        JLabel background = new JLabel();
         background.setLayout(new BorderLayout());
 
         JButton updateButton = new JButton("Update");
@@ -71,7 +71,7 @@ public class Gui implements ActionListener {
         background.add(panel, BorderLayout.NORTH);
 
         frame.add(background);
-
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 
